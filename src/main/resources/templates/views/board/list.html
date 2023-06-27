@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<style>
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>글목록 페이지</title>
+
+    <script type="text/javascript">
+
+        function call_confirm(e){
+//alert(obj.dataset.idx + "  <<<< " +  e)
+            if(confirm("삭제하시겠습니다 ")){
+                alert("삭제프로세스.");
+                //location.href="/board/delete"
+            }else{
+                alert("취소");
+            }
+
+
+
+        }
+    </script>
+
+</head>
+<body>
+<form name="writeForm" action="/write"  method="POST">
+<div class="container">
+    <ul >
+        <li th:each="tmp : ${list}"><span th:text="${tmp.idx}"></span><div>작성자 : [[${tmp.name}]] </div> 제목은 : <span> [[${tmp.title}]]</span><button th:data-idx="${tmp.idx}" onclick="call_confirm() ">삭제</button><button>수정</button></li>
+    </ul>
+</div>
+</form>
+</div>
+</body>
+</html>
