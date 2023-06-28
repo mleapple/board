@@ -16,4 +16,8 @@
         select * from board
     </select>
 
+    <delete id="boardDelete">
+        delete from board where idx=#{idx}
+    </delete>
+
 </mapper>

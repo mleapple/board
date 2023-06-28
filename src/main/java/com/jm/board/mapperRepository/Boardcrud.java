@@ -13,4 +13,6 @@ public interface Boardcrud {
 
     void boardInsert(Board board);
     List<Board> getAllList();
+
+    void boardDelete(int idx);
 }

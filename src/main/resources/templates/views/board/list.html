@@ -6,32 +6,36 @@
 <head>
     <meta charset="UTF-8">
     <title>글목록 페이지</title>
-
     <script type="text/javascript">
-
-        function call_confirm(e){
-//alert(obj.dataset.idx + "  <<<< " +  e)
+        function callDeleteConfirm(obj){
             if(confirm("삭제하시겠습니다 ")){
-                alert("삭제프로세스.");
-                //location.href="/board/delete"
+                alert("삭제프로세스." +obj.dataset.idx);
+                var form = document.createElement('form'); // 폼객체 생성
+                var objs;
+                objs = document.createElement('input'); // 값이 들어있는 녀석의 형식
+                objs.setAttribute('type'    , 'hidden'); // 값이 들어있는 녀석의 type
+                objs.setAttribute('name'    , 'idx'); // 객체이름
+                objs.setAttribute('value'   , obj.dataset.idx); //객체값
+                form.appendChild(objs);
+                form.setAttribute('method', 'post'); //get,post 가능
+                form.setAttribute('action', "/board/boardDelete"); //보내는 url
+                document.body.appendChild(form);
+                form.submit();
+
             }else{
                 alert("취소");
             }
-
-
-
         }
     </script>
-
 </head>
 <body>
-<form name="writeForm" action="/write"  method="POST">
+
 <div class="container">
     <ul >
-        <li th:each="tmp : ${list}"><span th:text="${tmp.idx}"></span><div>작성자 : [[${tmp.name}]] </div> 제목은 : <span> [[${tmp.title}]]</span><button th:data-idx="${tmp.idx}" onclick="call_confirm() ">삭제</button><button>수정</button></li>
+        <li th:each="tmp : ${list}"><span th:text="${tmp.idx}"></span><div>작성자 : [[${tmp.name}]] </div> 제목은 : <span> [[${tmp.title}]]</span><button th:data-idx="${tmp.idx}" onclick="callDeleteConfirm(this) ">삭제하기 </button><button>수정</button></li>
     </ul>
 </div>
-</form>
+
 </div>
 </body>
 </html>
