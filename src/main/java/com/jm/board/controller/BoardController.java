@@ -41,16 +41,26 @@ public class BoardController {
     }
     @PostMapping("/boardDelete")
     public String boardDelete(HttpServletRequest req) { // ?idx=6
-        // 게시글 존재 유무 확인
-        // 로그인 필요함 남에 글을 삭제 할수도 있기때문
-        // 클릭 값등
-        // 삭제시는 검증 값 필요
+        // 로그인 안되어 있으면 인터셉터에서 처리 진입 못하게 처리
         String sIdx = (String)req.getParameter("idx");
         Integer idx = Integer.parseInt ((String)req.getParameter("idx"));
         boardcrud.boardDelete(idx); //삭제
         return "redirect:/board/list";
     }
+    @GetMapping("/detail/{idx}")
+    public String detail(@PathVariable("idx") int idx ,Model model) { // ?idx=6
+        // 로그인 안되어 있으면 인터셉터에서 처리 진입 못하게 처리
+        Board board     =boardcrud.boardDetail(idx);
+        model.addAttribute("board" , board);
 
+        return "/views/board/detail";
+    }
+
+    @PostMapping("/update/{idx}")
+    public String update(@PathVariable("idx") int idx , Board board ){
+        boardcrud.update(board);
+        return "redirect:/board/list";
+    }
 
 
 }

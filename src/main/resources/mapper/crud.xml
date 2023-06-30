@@ -20,4 +20,13 @@
         delete from board where idx=#{idx}
     </delete>
 
+    <select id="boardDetail" resultType="com.jm.board.entity.Board">
+        select * from board where idx = #{idx}
+    </select>
+
+    <update id="update">
+        update board set title =#{title} , contents=#{contents} where idx=#{idx}
+    </update>
+
+
 </mapper>

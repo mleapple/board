@@ -15,4 +15,7 @@ public interface Boardcrud {
     List<Board> getAllList();
 
     void boardDelete(int idx);
+    Board boardDetail(Integer idx);
+
+    void update(Board board);
 }

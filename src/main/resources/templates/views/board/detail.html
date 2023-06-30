@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<style>
+
+  .container {
+    display: flex;
+    flex-direction:column ;
+    /* display: inline-flex; */
+  }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>글쓰기페이지</title>
+
+    <script type="text/javascript">
+        function callDeleteConfirm(obj){
+            if(confirm("삭제하시겠습니다 ")){
+                alert("삭제프로세스." +obj.dataset.idx);
+                var form = document.createElement('form'); // 폼객체 생성
+                var objs;
+                objs = document.createElement('input'); // 값이 들어있는 녀석의 형식
+                objs.setAttribute('type'    , 'hidden'); // 값이 들어있는 녀석의 type
+                objs.setAttribute('name'    , 'idx'); // 객체이름
+                objs.setAttribute('value'   , obj.dataset.idx); //객체값
+                form.appendChild(objs);
+                form.setAttribute('method', 'post'); //get,post 가능
+                form.setAttribute('action', "/board/boardDelete"); //보내는 url
+                document.body.appendChild(form);
+                form.submit();
+
+            }else{
+                alert("취소");
+            }
+        }
+    </script>
+
+</head>
+<body>
+<form name="frm"  th:action="|/board/update/${board.idx}|" method="POST">
+<div class="container">
+    <input type="hidden"  name="idx" th:value="${board.idx}">
+작성자: <input type="text" name="name"  th:value="${board.name}" readonly><br>
+타이틀: <input type="text" name="title" th:value="${board.title}" ><br>
+내용:   <textarea rows="7" name="contents"  th:text="${board.contents}"></textarea>
+<button type="submit">수정</button>
+<button onclick="callDeleteConfirm">삭제</button>
+</div>
+</form>
+</body>
+</html>
