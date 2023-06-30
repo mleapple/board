@@ -1,25 +1,41 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
-<style>
-</style>
 <head>
-    <meta charset="UTF-8">
-    <title>글목록 페이지</title>
-    <script type="text/javascript">
-        function callDeleteConfirm(obj){
-           location.href = "/board/detail/"+obj.dataset.idx; //보내는 url
-        }
-    </script>
+    <title>미니게시판</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
 
 <div class="container">
-    <ul >
-        <li th:each="tmp : ${list}"><span th:text="${tmp.idx}"></span><div>작성자 : [[${tmp.name}]] </div> 제목은 : <span> [[${tmp.title}]]</span><button th:data-idx="${tmp.idx}" onclick="callDeleteConfirm(this) ">상세 </button><button>수정</button></li>
-    </ul>
+    <h2>기본스프링미니게시판CRUD</h2>
+    <div class="panel panel-default">
+        <div class="panel-heading">목록</div>
+        <div class="panel-body">
+            <table class="table table-bordered table-hover">
+            <tr>
+                <td>번호</td>
+                <td>제목</td>
+                <td>작성자</td>
+                <td>작성일</td>
+                <td>조회수</td>
+            </tr>
+            <tr th:each="lst : ${list}">
+                <td th:text="${lst.idx}"></td>
+                <td><a th:href="|/board/detail/${lst.idx}|">[[${lst.title}]]</a></td>
+                <td>[[${lst.name}]]</td>
+                <td th:text="${lst.date}"></td>
+                <td>[[${lst.count}]]</td>
+            </tr>
+                <a th:href="@{/board/write}" class="btn btn-primary btn-sm">글쓰기</a>
+        </table>
+        <div class="panel-footer">테스트</div>
+    </div>
 </div>
 
-</div>
 </body>
 </html>

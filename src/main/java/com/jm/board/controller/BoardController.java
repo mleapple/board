@@ -51,16 +51,30 @@ public class BoardController {
     public String detail(@PathVariable("idx") int idx ,Model model) { // ?idx=6
         // 로그인 안되어 있으면 인터셉터에서 처리 진입 못하게 처리
         Board board     =boardcrud.boardDetail(idx);
+
+        String nlString = System.getProperty("line.separator").toString();
         model.addAttribute("board" , board);
+        model.addAttribute("nlString" , nlString);
+
 
         return "/views/board/detail";
     }
 
-    @PostMapping("/update/{idx}")
-    public String update(@PathVariable("idx") int idx , Board board ){
-        boardcrud.update(board);
+    @PostMapping("/update")
+    public String updatePost( Board board ){
+        // 유효성 체크없이
+        if(board.getIdx() >0) {
+            boardcrud.update(board);
+        }
         return "redirect:/board/list";
     }
 
-
+    @GetMapping("/update/{idx}")
+    public String updateGet(@PathVariable("idx") int idx
+                            ,Model model ){
+        System.out.println(" updateGet");
+        Board board     =boardcrud.boardDetail(idx);
+        model.addAttribute("board" , board);
+        return "/views/board/updateform";
+    }
 }
