@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>미니게시판</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+
+        let exstatus = "";
+        $(document).ready(function(){
+            readAll();
+        });
+        function writef(){// 글쓰기
+            exstatus = "new";
+           var frm = $("form[name=frm]").serialize(); //직렬화 해주기
+            $.ajax({
+               url : "/restbo/new",
+               type:"post",
+                data: frm,
+               success:completeFunc,
+                error: function(e){
+                   alert("err : " +e);
+                }
+            });
+        }
+        function readAll(){
+            exstatus = "all";
+            $.ajax({
+               url : "/restbo/all",
+               type :"get",
+                dataType:"json",
+                success :completeFunc,
+                error: function(rdate , rstatus ,xhr ){
+                    alert("err : " +e);
+                }
+            });
+        }
+        function completeFunc( rdate , rstatus ,xhr ){
+            console.log("완료되면 수행할 함수 입니다" );
+            if(exstatus =="all"){
+               // $("#view").remove();
+                getList(rdate);
+            }else if(exstatus =="new"){
+                //$("#view").remove();
+                readAll();
+            }else{
+                alert("잘못된 인수입니다 ");
+            }
+        }
+
+        function getContents(idx , eidx) {//
+            if($("#tr" + eidx+"-2").attr("data-display") =="show"){
+                $("#tr" + eidx+"-2").hide();
+                $("#tr" + eidx+"-2").attr("data-display","hide")
+                return;
+            }
+
+          $.ajax({
+                url: "/restbo/" + idx,
+                type: "get",
+                dataType: "json",
+                success: function (data) {
+                    if ($("#tr" + eidx+"-2").css("display") == "none") {// 컨텐츠 내용 닫혀 있으면
+                        $("#tr" + eidx+"-2").show();
+                        $("#tr" + eidx+"-2").attr("data-display","show")
+                        $("#txt_"+eidx).val(data.contents);
+                    }
+                },
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+
+        function updateForm(idx ,eidx ,ustatus){
+           if(ustatus =="update"){
+               $("#tr" + eidx+"-1").find("td").eq(1).find("a").remove();
+               $("#tr" + eidx+"-1").find("td").eq(1).html($("#tmpiput").html());
+               $("#tr" + eidx+"-1").find("td").eq(1).find("input").eq(0).val(info[eidx].title);
+               $("#txt_"+eidx).attr("readonly",false); // 내용 변경
+           }else{
+               tmptitle= $("#tr" + eidx+"-1").find("td").eq(1).find("input").val();
+               $("#tr" + eidx+"-1").find("td").eq(1).find("input").remove();
+               $("#tr" + eidx+"-1").find("td").eq(1).html($("#tmpAtag").html());
+               $("#tr" + eidx+"-1").find("td").eq(1).find("a").attr("onclick","getContents("+idx+","+eidx+")")
+               $("#tr" + eidx+"-1").find("td").eq(1).find("a").text(info[eidx].title);// 초기회
+               $("#txt_"+eidx).val(info[eidx].contents);// 초기화
+               $("#txt_"+eidx).attr("readonly",true); // 취소
+
+           }
+        }
+
+        function updatePrc(idx ,eidx){
+            var title = $("#tr" + eidx+"-1").find("td").eq(1).find("input").eq(0).val(); // 내용
+            var content = $("#txt_"+eidx).val();
+            $.ajax({
+                url: "/restbo/update",
+                type: "PUT",
+                dataType: "json",
+                contentType:'application/json;charset=utf-8',
+                data : JSON.stringify({"idx":idx,"title":title,"contents":content}),
+                success: function (data) {
+
+                    readAll();
+                },
+                error: function () {
+                    alert("error");
+                }
+            });
+
+        }
+
+        function deletebo(idx , eidx){
+
+            if(confirm("삭제하시겠습니다 ")){
+                $.ajax({
+                    url: "/restbo/" + idx,
+                    type: "DELETE",
+                    dataType: "json",
+                    success: function (data) {
+
+                        readAll();
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+            }else{
+                alert("취소");
+            }
+        }
+        info="";
+        function getList(rdata){
+            if(rdata ==undefined || rdata ==null || rdata ==""){
+                alert("데이터 바인딩 오류 입니다");
+                return ;
+            }
+            info = rdata;
+            // 데이터가 존재하면 리스트 그려주기
+            //$("#view").load("read.html");
+
+            $("#listTemplate").load("/html/read.html", function(responseTxt, statusTxt, xhr){
+
+                if(statusTxt == "success" && xhr.status == 200) {
+                    $("#listTemplate").hide(); // 템플릿 숨기기
+                    if($("#tContainer"))   $("#tContainer").remove();
+
+                    $("#view").html($("#alllist").html())//테이블 넣기, 헤더넣기
+                    $("#view").find("table").attr("id",'tContainer')
+
+                    //console.log("===>>> " +$("#tritem tbody").html())
+                    var tbody =  $("#tritem tbody");
+
+
+                    console.log("아이디 :>>" )
+
+                    $.each(rdata, function (index, item) {
+
+                       var tbody = $("#tritem tbody")
+
+
+                      console.log("아이디 :>>" +$("#tContainer tbody").html())
+
+                        tbody.find("tr").eq(0).attr("id","tr"+index +"-"+1)
+                        tbody.find("tr").eq(0).attr("data-idx",index);
+                        //console.log("아이디 :>>" +tbody.find("tr").eq(0).attr("id"))
+                        var trtag = tbody.find("tr").eq(0);
+                        trtag.find("td").eq(0).text(item.idx);
+                        trtag.find("td").eq(1).find("a").text(item.title); // 제목"
+                        trtag.find("td").eq(1).find("a").attr("onclick","getContents("+item.idx+","+index+")")
+                        trtag.find("td").eq(2).text(item.name);
+                        trtag.find("td").eq(3).text(item.count);
+                        trtag.find("td").eq(4).text(item.date);
+
+                        tbody.find("tr").eq(1).attr("id","tr"+index +"-"+2);
+                        tbody.find("tr").eq(1).attr("data-idx",index)
+                        var trtag2 = tbody.find("tr").eq(1); // 두번째 템플릿
+                        //console.log(item.title);
+                        trtag2.find("td").eq(0).text("내용");
+                        trtag2.find("td").eq(1).find("textarea").attr("id","txt_"+index);
+                        trtag2.find("td").eq(1).find("textarea").val("");
+                        // 수정버튼
+                        trtag2.find("td").eq(1).find("span").find("button").attr("onclick","updateForm("+item.idx+","+index+",'update"+"')");
+                        // 삭제버튼
+                        trtag2.find("td").eq(1).find("button").eq(1).attr("onclick","deletebo("+item.idx+","+index+")");
+                        //취소버튼
+                        trtag2.find("td").eq(1).find("button").eq(2).attr("onclick","updateForm("+item.idx+","+index+",'cancel"+"')");
+                        //수정등록
+                        trtag2.find("td").eq(1).find("button").eq(3).attr("onclick","updatePrc("+item.idx+","+index+",'cancel"+"')");
+                        $("#tContainer tbody").append(tbody.html());
+
+                    });
+
+                    $("#tritem").remove();
+                } else {
+                    alert("에러 발생: " + xhr.status + ": " + xhr.statusText);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="listTemplate"></div>
+
+<div class="container">
+    <h2>rest_미니게시판_CRUD</h2>
+    <div class="panel panel-default">
+        <div class="panel-heading">ajax게시판</div>
+        <div class="panel-body" id="view"></div>
+        <div class="panel-body">
+            <form name="frm" action="/board/write" method="POST">
+                <table class="table">
+                    <tr>
+                        <td>제목</td>
+                        <td><input type="text" name="title" class="form-control"/></td>
+                    </tr>
+                    <tr>
+                        <td>내용</td>
+                        <td><textarea rows="7" class="form-control" name="contents"></textarea> </td>
+                    </tr>
+                    <tr>
+                        <td>작성자</td>
+                        <td><input type="text" name="name" class="form-control"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center">
+                            <button type="button" onclick="writef()" class="btn btn-success btn-sm">등록</button>
+
+                            <button type="reset" class="btn btn-warning btn-sm">취소</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="panel-footer"></div>
+    </div>
+</div>
+
+</body>
+</html>
