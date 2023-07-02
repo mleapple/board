@@ -28,5 +28,10 @@
         update board set title =#{title} , contents=#{contents} , date= now()  where idx=#{idx}
     </update>
 
+    <update id="boardCount" parameterType="java.lang.Integer">
+        update board set count =count +1  where idx=#{idx}
+    </update>
+
+
 
 </mapper>

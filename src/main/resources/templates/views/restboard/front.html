@@ -66,6 +66,7 @@
                     if ($("#tr" + eidx+"-2").css("display") == "none") {// 컨텐츠 내용 닫혀 있으면
                         $("#tr" + eidx+"-2").show();
                         $("#tr" + eidx+"-2").attr("data-display","show")
+                        $("#tr" + eidx+"-1").find("td").eq(3).text(data.count);
                         $("#txt_"+eidx).val(data.contents);
                     }
                 },
@@ -75,13 +76,17 @@
             });
         }
 
+        let  updateStatus = ""
         function updateForm(idx ,eidx ,ustatus){
            if(ustatus =="update"){
+               updateStatus  =  "update";
                $("#tr" + eidx+"-1").find("td").eq(1).find("a").remove();
                $("#tr" + eidx+"-1").find("td").eq(1).html($("#tmpiput").html());
                $("#tr" + eidx+"-1").find("td").eq(1).find("input").eq(0).val(info[eidx].title);
                $("#txt_"+eidx).attr("readonly",false); // 내용 변경
            }else{
+               updateStatus  =  "cancel";
+
                tmptitle= $("#tr" + eidx+"-1").find("td").eq(1).find("input").val();
                $("#tr" + eidx+"-1").find("td").eq(1).find("input").remove();
                $("#tr" + eidx+"-1").find("td").eq(1).html($("#tmpAtag").html());
@@ -94,6 +99,7 @@
         }
 
         function updatePrc(idx ,eidx){
+            if( updateStatus != "update") return alert("수정화면에서만 가능 합니다");
             var title = $("#tr" + eidx+"-1").find("td").eq(1).find("input").eq(0).val(); // 내용
             var content = $("#txt_"+eidx).val();
             $.ajax({
@@ -121,7 +127,6 @@
                     type: "DELETE",
                     dataType: "json",
                     success: function (data) {
-
                         readAll();
                     },
                     error: function () {

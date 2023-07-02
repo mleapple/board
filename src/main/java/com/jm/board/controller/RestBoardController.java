@@ -30,8 +30,9 @@ public class RestBoardController {
     }
     @GetMapping("/{idx}")
     public @ResponseBody Board detailbo(@PathVariable("idx") int idx){
-
+        int n  = boardcrud.boardCount(idx);
         Board board   =boardcrud.boardDetail(idx);
+
         return  board;
     }
 
@@ -53,10 +54,17 @@ public class RestBoardController {
         Map result = new HashMap();
         int n =  boardcrud.update(board);
         result.put("status", n>0 ?"SUCCESS":"FAIL");
-
         return result;
     }
 
+    @PutMapping("/count/{idx}")
+    public @ResponseBody Map boCount(@PathVariable("idx") int idx) {
 
+
+        Map result = new HashMap();
+        int n  = boardcrud.boardCount(idx);
+        result.put("status", n>0 ?"SUCCESS":"FAIL");
+        return result;
+    }
 
 }

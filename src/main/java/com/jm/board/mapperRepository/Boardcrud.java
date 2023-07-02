@@ -11,11 +11,13 @@ import java.util.List;
 @Repository
 public interface Boardcrud {
 
-    int boardInsert(Board board);
-    List<Board> getAllList();
+    int boardInsert(Board board);// 등록
+    List<Board> getAllList(); // 전체 리스트
 
-    int boardDelete(int idx);
-    Board boardDetail(Integer idx);
+    int boardDelete(int idx); // 삭제
+    Board boardDetail(Integer idx); // 상세
 
-    int update(Board board);
+    int update(Board board); // 수정
+
+    int  boardCount(int idx); // 카운트
 }
