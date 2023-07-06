@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 위 코드가 mapper 설정을 하는 코드 -->
+
+<!-- Mapper를 사용하는 Repository의 전체 경로를 적어줘야함. -->
+<mapper namespace="com.jm.board.mapperRepository.Profilecrud">
+
+    <insert id="profileInsert" parameterType="com.jm.board.entity.ProfileVo" useGeneratedKeys="true" keyProperty="fidx" keyColumn="fidx">
+       insert into profiledb(midx,nicname,regdate,moddate  )
+                values(#{midx},#{nicname},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
+    </insert>
+
+    <insert id="filePathInsert" parameterType="com.jm.board.entity.Fitems">
+        insert into attachfiledb(fkey ,midx,storeFileName ,uuidFileName ,regdate,moddate  )
+        values(#{fkey},#{midx},#{storeFileName},#{uuidFileName},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
+    </insert>
+
+
+    <insert id="imgfilePathInsert" parameterType="com.jm.board.entity.Fitems">
+       insert into imgfiledb(fkey ,midx,storeFileName ,uuidFileName ,regdate,moddate  )
+       values(#{fkey},#{midx},#{storeFileName},#{uuidFileName},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
+    </insert>
+
+    <select id="profilefindById" resultType="com.jm.board.entity.ProfileVo" parameterType="Long">
+        select * from profiledb where midx = #{midx}
+    </select>
+
+
+    <select id="filePathfilefindById" resultType="com.jm.board.entity.Fitem" parameterType="Long">
+        select * from attachfiledb where midx = #{midx}
+    </select>
+
+    <select id="imgfilePathfindById" resultType="com.jm.board.entity.Fitems" parameterType="Long">
+        select * from imgfiledb where midx = #{midx}
+    </select>
+
+
+
+
+</mapper>

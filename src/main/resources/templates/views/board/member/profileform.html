@@ -1,0 +1,72 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{views/board/layout/theader :: commonheader(~{::title},~{::link},~{::style},~{::script})}">
+  <title>로그인 폼</title>
+  <link   rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <style>
+    .container {
+      max-width: 560px;
+    }
+    .field-error {
+      border-color: #dc3545;
+      color: #dc3545;
+    }
+  </style>
+
+  <script th:inline="javascript">
+
+  </script>
+</head>
+<body>
+<th:block th:replace="~{views/board/layout/navi :: naviFragment}"></th:block> <!--    <nav></nav>-->
+
+<div class="container">
+  <h2>프로필 폼</h2>
+  <div class="panel panel-default">
+    <div class="panel-heading">프로필화면</div>
+    <div class="panel-body">
+  [[${session.loginMember.midx}]]
+      <form th:action  method="post" th:object="${profileForm}" enctype="multipart/form-data">
+
+
+        <input type="hidden" name="midx" id="midx"  th:value="${session.loginMember.midx}" />
+        <table class="table table-bordered" style="text-align: center; border: 1px solid #dddddd;">
+          <tr>
+            <td style="width: 110px; vertical-align: middle;">별명</td>
+            <td>
+              <input id="nicname"
+                     name="nicname"
+                     th:field="*{nicname}"
+                     type="text"
+                     maxlength="20"
+                     placeholder="별명 입력하세요."/>
+
+            </td>
+          </tr>
+          <tr>
+            <td style="width: 110px; vertical-align: middle;">파일 명 </td>
+            <td colspan="2">
+              <input type="file" name="attachfile" th:field="*{attachfile}"  class="form-control" />
+
+              <input type="file" name="imageFiles"  multiple="multiple" th:field="*{imageFiles}"  class="form-control" />
+
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align: left;">
+              <input type="submit" class="btn btn-primary btn-sm pull-right" value="파일업로드"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+    <!-- 실패 메세지를 출력(modal) -->
+
+  </div>
+</div>
+
+</body>
+</html>

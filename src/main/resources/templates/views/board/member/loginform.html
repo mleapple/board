@@ -1,0 +1,80 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{views/board/layout/theader :: commonheader(~{::title},~{::link},~{::style},~{::script})}">
+    <title>로그인 폼</title>
+    <link   rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+        .container {
+            max-width: 560px;
+        }
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
+
+    <script th:inline="javascript">
+
+    </script>
+</head>
+<body>
+<th:block th:replace="~{views/board/layout/navi :: naviFragment}"></th:block> <!--    <nav></nav>-->
+
+<div class="container">
+    <h2>로그인 폼</h2>
+    <div class="panel panel-default">
+        <div class="panel-heading">로그인화면</div>
+        <div class="panel-body">
+
+
+
+            <form action="/member/login"  th:action th:object="${loginForm}" method="post">
+
+                <div th:if="${#fields.hasGlobalErrors()}">
+                    <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
+                </div>
+
+                <table class="table table-bordered" style="text-align: center; border: 1px solid #dddddd;">
+                    <tr>
+                        <td style="width: 110px; vertical-align: middle;">아이디</td>
+                        <td>
+                            <input id="memid"
+                                   name="memid"
+                                   th:errorclass="field-error"
+                                   class="form-control"
+                                   type="text"
+                                   maxlength="20"
+                                   placeholder="아이디를 입력하세요."/>
+                            <div class="field-error" th:errors="*{memid}">
+                                아이디를 입력 오류
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 110px; vertical-align: middle;">비밀번호</td>
+                        <td colspan="2">
+                            <input id="password" name="password"  th:errorclass="field-error"
+                                   class="form-control" type="password" maxlength="20" placeholder="비밀번호를 입력하세요."/>
+                            <div class="field-error" th:errors="*{password}">
+                                아이디를 입력 오류
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: left;">
+                            <input type="submit" class="btn btn-primary btn-sm pull-right" value="로그인"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <!-- 실패 메세지를 출력(modal) -->
+
+    </div>
+</div>
+
+</body>
+</html>

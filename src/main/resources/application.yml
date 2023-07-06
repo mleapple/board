@@ -4,12 +4,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 1234
-
-
-
-
-
-
+  messages:
+    basename: messages
 
 mybatis:
   mapper-locations: mapper/*.xml
+
+file:
+  dir: C:\study\upload\

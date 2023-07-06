@@ -1,0 +1,25 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+   <head th:replace="~{views/board/layout/theader :: commonheader(~{::title},~{::link},~{::style},~{::script})}">
+       <title>메인페이지</title>
+       <link   rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+
+    </style>
+   </head>
+   <body>
+    <th:block th:replace="~{views/board/layout/navi :: naviFragment}"></th:block> <!--    <nav></nav>-->
+
+    <div class="jumbotron text-center">
+        <h1>메인페이지</h1>
+        <p>테스트입니다</p>
+    </div>
+
+    <div class="container">
+       컨텐츠
+    </div>
+    <th:block th:replace="~{views/board/layout/footer :: footerFragment}"></th:block>
+    </body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- header fragment 사용 -->
+<head th:fragment="commonheader(title,link,style,script)">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title th:replace="${title}"> 레이아웃 타이틀</title>
+
+    <th:block th:replace="${link}"></th:block>
+    <th:block th:replace="${style}"></th:block>
+    <th:block th:replace="${script}"></th:block>
+</head>
+
+
+</html>
