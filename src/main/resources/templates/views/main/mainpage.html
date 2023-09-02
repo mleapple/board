@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
-   <head th:replace="~{views/board/layout/theader :: commonheader(~{::title},~{::link},~{::style},~{::script})}">
+   <head >
        <title>메인페이지</title>
        <link   rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -8,18 +8,181 @@
     <style>
 
     </style>
+
    </head>
    <body>
-    <th:block th:replace="~{views/board/layout/navi :: naviFragment}"></th:block> <!--    <nav></nav>-->
 
     <div class="jumbotron text-center">
         <h1>메인페이지</h1>
         <p>테스트입니다</p>
+        <input type="text" id="ch"><br>
+        <input type="text" name="aaaaa" id="testBox">
     </div>
 
     <div class="container">
        컨텐츠
     </div>
-    <th:block th:replace="~{views/board/layout/footer :: footerFragment}"></th:block>
+
+    <script>
+
+        console.log(Math.random())
+        $("#ch").on("keyup" ,function(e){
+            console.log(e+"--");
+            $(this).val($(this).val().replace(/[^.0-9]/g,''));
+        })
+        $("#ch").on("keydown" ,function(e){
+            console.log(e+"--111keypress");
+            $(this).val($(this).val().replace(/[^.0-9]/g,''));
+        })
+        $("#ch").on("keypress" ,function(e){
+            console.log(e+"--111keypress");
+            $(this).val($(this).val().replace(/[^.0-9]/g,''));
+        })
+
+        testBox.oninput = function(e) {
+           // testBox.value = testBox.value.replace(/[^.0-9]/g,''));
+
+            var obj = checkFu(testBox.value.replace(/[^.0-9]/g,''));
+            if(obj.chcIdx >0){
+                testBox.value = testBox.value.substring(0,obj.chcIdx);
+            }else{
+             /*   var pp = /[^.0-9]/g;
+                if(pp.test(testBox.value) ){
+                    console.log("문자열은 넣을수 없습니다");
+                    testBox.value = testBox.value.replace(/[^.0-9]/g,'');
+                    return false;
+                }*/
+                testBox.value = testBox.value.replace(/[^.0-9]/g,'');
+                if(testBox.value.indexOf(".") != -1) {
+                    testBox.value = testBox.value.substring(0, testBox.value.indexOf(".") + 2);
+                }
+            }
+
+          /*  if(!isNumberKey(e)){
+                var obj = checkFu(testBox.value);
+               if(obj.chcIdx >0){
+                   testBox.value = testBox.value.substring(0,obj.chcIdx);
+               }else{
+                   testBox.value = testBox.value.replace(/[^.0-9]/g,'');
+               }
+
+            }*/
+        };
+
+        function checkFu(str){
+            var cnt  = 0 ;
+            var chcIdx = 0;
+            for(var i =  0 ;i < str.length ; i++){
+                if(str.charAt(i) ==".") {
+                    cnt ++;
+                    if(cnt == 2){chcIdx =  i}
+                }
+            }
+            return {cnt: cnt,chcIdx : chcIdx};
+        }
+       /* function checkFu(str){
+            var cnt  = 0 ;
+            var chcIdx = 0;
+            for(var i =  0 ;i < str.length ; i++){
+                if(str.charAt(i) ==".") {
+                    cnt ++;
+                    if(cnt == 2){chcIdx =  i}
+                }
+            }
+
+            return {cnt: cnt,chcIdx : chcIdx};
+        }
+        checkFu("1.111.2.")
+
+        "1.111.2.".substring(0,4)*/
+
+      /*  var value="1.123"
+        var regExp = /^\d*.?\d{0,2}$/;
+        if(!regExp.test(value)){
+            value = value.substring(0,value.length-1);
+        }
+        value
+        '1.12'
+
+*/
+     /*   var value="1.123"
+        var regExp = /^([1-9]{1}\d{0,1}|0{1})(\.{1}\d{0,2})?$/g;
+        if(!regExp.test(value)){
+            value.indexOf(".")
+            value = value.substring(0,value.length-1);
+        }
+
+        var string = '12..';
+        var search = ".";
+        const regexp = new RegExp(search, 'g');
+        console.log(string.match(regexp).length);*/
+// /^([1-9]{1}\d{0,1}|0{1})(\.{1}\d{0,2})?$/g
+        function isNumberKey(e) {
+            var charCode =  e.keyCode;
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            // Textbox value
+            var _value = e.target.value;
+console.log("rkqt .... >" + _value )
+            // 소수점(.)이 두번 이상 나오지 못하게
+            var _pattern0 = /^\d*[.]\d*$/; // 현재 value값에 소수점(.) 이 있으면 . 입력불가
+            if (_pattern0.test(_value)) {
+                if (charCode == 46) {
+                    return false;
+                }
+            }
+
+                // 1000 이하의 숫자만 입력가능
+            checkFu(_value)
+            if (_pattern0.test(_value)) {
+
+                    alert("숫자만 입력가능합니다");
+                    return false;
+
+            }
+
+
+            // 1000 이하의 숫자만 입력가능
+            var _pattern1 = /^\d{3}$/; // 현재 value값이 3자리 숫자이면 . 만 입력가능
+            if (_pattern1.test(_value)) {
+                if (charCode != 46) {
+                    alert("1000 이하의 숫자만 입력가능합니다");
+                    return false;
+                }
+            }
+
+            // 소수점 둘째자리까지만 입력가능
+            var _pattern2 = /^\d*[.]\d{2}$/; // 현재 value값이 소수점 둘째짜리 숫자이면 더이상 입력 불가
+            if (_pattern2.test(_value)) {
+                alert("소수점 둘째자리까지만 입력가능합니다.");
+                return false;
+            }
+
+            return true;
+        }
+
+
+        /*  var aaa = document.getElementById("aaaaa");
+        aaa.addEventListener('input', function(e){
+
+            e.value = e.value.replace(/[^.0-9]/g,'');
+        })
+*/
+
+        //777
+        /*document.querySelector("input[name='aaaaa']").addEventListener('input', function(e){
+
+            e.value = e.value.replace(/[^.0-9]/g,'');
+        })
+*/
+        /*   $("#ch").keydown(function(e){
+               console.log(e+"--111222")
+           })
+           $("#ch").click(function(e){
+               console.log(e+"-dddd-111")
+           })
+           console.log("--ddddddddddddddddddd111")*/
+    </script>
     </body>
 </html>
